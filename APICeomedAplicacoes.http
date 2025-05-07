@@ -1,0 +1,6 @@
+@APICeomedAplicacoes_HostAddress = http://localhost:5190
+
+GET {{APICeomedAplicacoes_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

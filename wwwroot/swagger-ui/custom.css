@@ -1,0 +1,21 @@
+﻿.swagger-ui .topbar {
+    background-color: rgb(18, 179, 133) !important; /* Azul */
+}
+
+.swagger-ui .info {
+    background-color: #f4f4f4; /* Cinza Claro */
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.swagger-ui .topbar-wrapper img {
+    content: url('/swagger-ui/ceomedlogo.png');
+}
+
+hgroup.main > .link,
+.swagger-ui .info .title small.version-stamp,
+.topbar-wrapper  .download-url-wrapper  .select-label {
+    display: none !important;
+}
+
+
