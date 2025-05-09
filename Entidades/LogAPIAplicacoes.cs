@@ -5,6 +5,7 @@ using APICeomedAplicacoes.ParamModelsApiAplicacoes;
 using System.Collections;
 using System.Data;
 using APICeomedAplicacoes.Seguranca;
+using System.Text;
 
 namespace APICeomedAplicacoes.Entidades
 {
@@ -19,40 +20,11 @@ namespace APICeomedAplicacoes.Entidades
         public String Response { get; set; }
         public String Message{ get; set; }
         public int Ambiente { get; set; }
+        public String RequestBody { get; set; }
         
         protected virtual HttpRequest httpRequest { get; set; }
 
-        public static string GetLog<T>(BaseRequest<T> request)
-        {
-            DbHelper.UseDbPrincipal();
-            string mensagem = "";
-
-            if (!request.GetResponse().IsSuccess)
-                foreach (var item in request.GetResponse().errors) mensagem += mensagem == "" ? item.message : ", " + item.message;
-            else
-                mensagem = request.GetResponse().message;
-
-            string token = request.httpRequest.Headers["Authorization"].ToString().Replace("Bearer ","");
-            Int64? IdAplicacao = DbHelper.Select<ApiAccessTokens>(x => x.ApiToken == token).FirstOrDefault()?.Id;
-
-            LogAPIAplicacoes log = new LogAPIAplicacoes()
-            {
-                IdAplicacao = IdAplicacao,
-                IdClinica = (request.param as BaseParamApi) == null ? null : (request.param as BaseParamApi).IdClinica,
-                RequestStatus = request.GetResponse().IsSuccess ? 1 : 0,
-                Response = JsonConvert.SerializeObject(request.GetResponse()),
-                Message = mensagem,
-                Data = DateTime.Now,
-                Ambiente = request.ambiente,
-                httpRequest = request.httpRequest,
-                RequestPath = request.httpRequest.Scheme + "://" + request.httpRequest.Host.Value + request.httpRequest.Path.Value,
-                Params = request.httpRequest?.QueryString.Value?.ToString()
-            };
-            return log.Insert().ToString();
-           
-        }
-
-        public static string GravarLog(Response response,HttpRequest httpRequest)
+        public static async Task<string> GravarLog(Response response,HttpRequest httpRequest,string body = null)
         {
             DbHelper.UseDbPrincipal();
             string mensagem = "";
@@ -64,13 +36,17 @@ namespace APICeomedAplicacoes.Entidades
 
             string ClinicaId = httpRequest.Query.Where(x => x.Key == "IdClinica").FirstOrDefault().Value;
 
+
+            string token = httpRequest.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            Int64? IdAplicacao = DbHelper.Select<ApiAccessTokens>(x => x.ApiToken == token).FirstOrDefault()?.Id;
+
             Int64 idClinica = 0;
 
             Int64.TryParse(ClinicaId, out idClinica);
-
+           
             LogAPIAplicacoes log = new LogAPIAplicacoes()
             {
-                IdAplicacao = DbHelper.Select<ApiAccessTokens>(x => x.ApiToken == httpRequest.Headers["Authorization"]).FirstOrDefault()?.Id,
+                IdAplicacao = IdAplicacao,
                 IdClinica = idClinica == 0 ? null : idClinica,
                 RequestStatus = 0,
                 Response = JsonConvert.SerializeObject(response),
@@ -79,7 +55,8 @@ namespace APICeomedAplicacoes.Entidades
                 Ambiente = httpRequest == null ? 0 : httpRequest.Host.Host.Contains("localhost") || httpRequest.Path.Value.Contains("v2") ? 1 : 0,
                 httpRequest = httpRequest,
                 RequestPath = httpRequest.Scheme + "://" + httpRequest.Host.Value + httpRequest.Path.Value,
-                Params = httpRequest?.QueryString.Value?.ToString()
+                Params = httpRequest?.QueryString.Value?.ToString(),
+                RequestBody = body
             };
 
             return log.Insert().ToString();

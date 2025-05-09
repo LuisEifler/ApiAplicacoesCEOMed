@@ -44,7 +44,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 Response response = Response.Error();
                 response.AddError("ApiToken ausente ou inválido.");
                 response.Code = 401;
-                response.traceId = LogAPIAplicacoes.GravarLog(response, context.Request);
+                response.traceId = LogAPIAplicacoes.GravarLog(response, context.Request, context.Request.Method == "POST" ? context.HttpContext.Items["RawBody"] as string : null).Result;
                 var result = System.Text.Json.JsonSerializer.Serialize(response);
 
                 return context.Response.WriteAsync(result);
@@ -57,7 +57,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 Response response = Response.Error();
                 response.AddError("ApiToken ausente ou inválido.");
                 response.Code = 401;
-                response.traceId = LogAPIAplicacoes.GravarLog(response, context.Request);
+                
+                response.traceId = LogAPIAplicacoes.GravarLog(response, context.Request, context.Request.Method == "POST" ? context.HttpContext.Items["RawBody"] as string : null).Result;
                 
                 var result = System.Text.Json.JsonSerializer.Serialize(response);
 
@@ -79,7 +80,8 @@ builder.Services.AddControllers()
         {
             var erros = context.ModelState
                 .Where(e => e.Value.Errors.Count > 0)
-                .Select(e => new {
+                .Select(e => new
+                {
                     Campo = e.Key,
                     Erro = e.Value.Errors.First().ErrorMessage
                 })
@@ -92,13 +94,13 @@ builder.Services.AddControllers()
                 Code = 400
             };
 
-            foreach(var erro in erros)
+            foreach (var erro in erros)
             {
-                response.AddError($"O valor enviado para '{erro?.Campo}' é inválido.");
+                response.AddError($"O valor enviado para '{erro?.Campo}' é inválido.", "Parametrôs invalidos.");
             }
-
-            response.traceId = LogAPIAplicacoes.GravarLog(response, context.HttpContext.Request);
            
+            response.traceId = LogAPIAplicacoes.GravarLog(response, context.HttpContext.Request, context.HttpContext.Request.Method == "POST" ? context.HttpContext.Items["RawBody"] as string : null).Result;
+
 
             return new BadRequestObjectResult(response);
         };
@@ -171,6 +173,8 @@ var app = builder.Build();
 
 
 app.UseCors("AllowAllOrigins");
+
+app.UseMiddleware<BodyLoggingMiddleware>();
 
 app.UseStaticFiles();
 app.UseSwagger();
