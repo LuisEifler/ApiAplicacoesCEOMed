@@ -68,45 +68,46 @@ namespace APICeomedAplicacoes.Base
         public static bool ValidParam(RequiredParam att, object value)
         {
             bool valid = true;
-            switch (att.Type)
+            if (att.Type == ETiposParam.Cpf)
             {
-                case ETiposParam.String:
-                    {
-                        return (value == null || value == "");
-                    }
-                case ETiposParam.Bool:
-                    {
-                        valid = (value == null);
-                        try { Convert.ToBoolean(value); valid = true; } catch { valid = false; }
-                        return !valid;
-                    }
-                case ETiposParam.Int:
-                    {
-                        valid = (value == null);
-                        try { Convert.ToInt32(value); valid = true; } catch { valid = false; }
-                        return !valid;
-                    }
-                case ETiposParam.DateTime:
-                    {
-                        valid = (value == null || value == "");
-                        try { Convert.ToDateTime(value); valid = true; } catch { valid = false; }
-                        return !valid;
-                    }
-                case ETiposParam.Cpf:
-                    {
-                        valid = (value == null || value == "" && (!Util.ValidarCpf(value.ToString())));
-                        return valid;
-                    }
+                valid = (value == null || value == "" && (!Util.ValidarCpf(value.ToString())));
+                return valid;
+            }
+
+            switch (value.GetType().Name)
+            {
+                case "String":
+                    return string.IsNullOrWhiteSpace(value as string);
+
+                case "Boolean":
+                    try { Convert.ToBoolean(value); return false; }
+                    catch { return true; }
+
+                case "Int16":
+                    try { Convert.ToInt16(value); return Convert.ToInt16(value) == 0 ? true : false; }
+                    catch { return true; }
+                case "Int32":
+                    try { Convert.ToInt32(value); return Convert.ToInt32(value) == 0 ? true : false; }
+                    catch { return true; }
+                case "Int64":
+                    try { Convert.ToInt64(value); return Convert.ToInt64(value) == 0 ? true : false; }
+                    catch { return true; }
+
+                case "DateTime":
+                    try { Convert.ToDateTime(value); return false; }
+                    catch { return true; }
                 default:
                     {
                         return (value == null);
                     }
             }
+
+            
         }
 
         virtual public void GravarLog()
         {
-            this.response.traceId = LogAPIAplicacoes.GetLog(this);
+            this.response.traceId = LogAPIAplicacoes.GravarLog(this.response,this.httpRequest, this.httpRequest.Method == "POST" ? JsonConvert.SerializeObject(this.param) : null).Result;
         }
 
     }

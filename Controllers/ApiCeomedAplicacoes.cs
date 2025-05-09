@@ -334,5 +334,72 @@ public class ApiCeomedAplicacoes : ControllerBase
 
     #endregion
 
+    #region Metodos Post
+
+    [Authorize]
+    [HttpPost]
+    [SwaggerOperation(Summary = "Blqueia um determinado horario.")]
+    [ProducesResponseType(typeof(Response), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(Response), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(Response), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Response), StatusCodes.Status500InternalServerError)]
+    public object? Bloqueio([FromBody] PostBloqueioAgendaParam param)
+    {
+        PostRequet<PostBloqueioAgendaParam> request = new(param,Request);
+
+        try
+        {
+            if (request.GetResponse().IsSuccess)
+            {
+                DbHelper.SetDbClienteConection(request.param.IdClinica);
+                BloqueioAgendaMedicos bloqueio = new(request.param);
+                Int64 id = bloqueio.Insert();
+                if (id != -1) request.GetResponse().Code = 201;
+            }
+            return request.GetResult();
+        }
+        catch(Exception ex)
+        {
+            request.GetResponse().AddError(ex.Message);
+            return request.GetResult(500);
+        }
+
+    }
+
+    #endregion
+
+    #region Metodos Delete
+
+    [Authorize]
+    [HttpDelete]
+    [SwaggerOperation(Summary = "Remove um bloqueio de um horario.")]
+    [ProducesResponseType(typeof(Response), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Response), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(Response), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Response), StatusCodes.Status500InternalServerError)]
+    [Route("/api/v2/[action]/{IdClinica}/{Id}")]
+    public object? Bloqueio(Int64 IdClinica,Int64 Id)
+    {
+        Id = Id - 9000000;
+        DeleteRequet request = new(IdClinica,Id,Request);
+
+        try
+        {
+            if (request.GetResponse().IsSuccess)
+            {
+                if (!request.Execute<BloqueioAgendaMedicos>()) 
+                    request.GetResponse().AddError("Erro ao remover o bloqueio.");
+            }
+            return request.GetResult();
+        }
+        catch (Exception ex)
+        {
+            request.GetResponse().AddError(ex.Message);
+            return request.GetResult(500);
+        }
+
+    }
+
+    #endregion
 }
 

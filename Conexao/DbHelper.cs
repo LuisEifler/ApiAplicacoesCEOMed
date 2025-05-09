@@ -17,10 +17,10 @@ namespace APICeomedAplicacoes.Conexao
     {
         readonly static String connStringBancoPrincipal = "Server=ceomed.ddns.net,30232;Database=CEO_Principal;User Id=ceo_conexao;Password=qweEWQ150)%!C0n3X@o";
         private static string connStringBancoCliente = "";
-        public static void SetDbClienteConection(Int64 IdClinica)
+        public static void SetDbClienteConection(Int64? IdClinica)
         {
             UseDbPrincipal();
-            TabBancos tab = Select<TabBancos>(x => x.tbCodigo == IdClinica).FirstOrDefault();
+            TabBancos tab = Select<TabBancos>(x => x.tbCodigo == IdClinica.Value).FirstOrDefault();
             connStringBancoCliente = tab.StringConexaoFormatada;
             UseDbCliente();
         }
@@ -273,7 +273,7 @@ namespace APICeomedAplicacoes.Conexao
             foreach (var item in obj.GetType().GetRuntimeProperties())
             {
                 if (item.Name == "Id") continue;
-                if (item.GetMethod.IsVirtual || item.SetMethod.IsVirtual) continue;
+                if (item.GetMethod.IsVirtual || item.SetMethod.IsNotNull() && item.SetMethod.IsVirtual) continue;
 
                 if (coloumns == "") coloumns = "(" + item.Name;
                 else coloumns += "," + item.Name;

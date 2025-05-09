@@ -95,7 +95,7 @@ namespace APICeomedAplicacoes.Controllers
         [ProducesResponseType(typeof(ResponseValue<List<WebUsuario>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status400BadRequest)]
-        //[ApiExplorerSettings(IgnoreApi = true)]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public object? GetContatos([FromQuery] BaseParamApi param)
         {
             GetRequest<BaseParamApi, List<WebUsuario>> request = new(param, Request);
