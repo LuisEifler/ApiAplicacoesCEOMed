@@ -101,13 +101,12 @@ namespace APICeomedAplicacoes.Base
                         return (value == null);
                     }
             }
-
             
         }
 
         virtual public void GravarLog()
         {
-            this.response.traceId = LogAPIAplicacoes.GravarLog(this.response,this.httpRequest, this.httpRequest.Method == "POST" ? JsonConvert.SerializeObject(this.param) : null).Result;
+            this.response.traceId = LogAPIAplicacoes.GravarLog(this.response,this.httpRequest, this.httpRequest.Method is "POST" or "PATCH" ? JsonConvert.SerializeObject(this.param) : null).Result;
         }
 
     }
