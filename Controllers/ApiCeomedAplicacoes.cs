@@ -32,6 +32,7 @@ public class ApiCeomedAplicacoes : ControllerBase
     [ProducesResponseType(typeof(ResponseValue<Usuario>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ResponseValue<object>),StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ResponseValue<object>),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status500InternalServerError)]
     public object? Login([FromQuery] GetLoginParam param)
     {
         GetRequest<GetLoginParam, Usuario> request = new(param, Request);
@@ -88,6 +89,7 @@ public class ApiCeomedAplicacoes : ControllerBase
     [ProducesResponseType(typeof(ResponseValue<List<Profissional>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status500InternalServerError)]
     public object? GetProfissionais([FromQuery] GetProfissionaisParam param)
     {
 
@@ -120,6 +122,7 @@ public class ApiCeomedAplicacoes : ControllerBase
     [ProducesResponseType(typeof(ResponseValue<GetAgendaResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status500InternalServerError)]
     public object? GetAgenda([FromQuery] GetAgendaParam parametro)
     {
 
@@ -159,6 +162,7 @@ public class ApiCeomedAplicacoes : ControllerBase
     [ProducesResponseType(typeof(ResponseValue<List<GetPacientesFromNameResponse>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status500InternalServerError)]
     public object? GetPacientesFromParcialName([FromQuery] GetPacienteFromNameParam param)
     {
         GetRequest<GetPacienteFromNameParam, List<GetPacientesFromNameResponse>> request = new(param, Request);
@@ -194,6 +198,7 @@ public class ApiCeomedAplicacoes : ControllerBase
     [ProducesResponseType(typeof(ResponseValue<Paciente>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status500InternalServerError)]
     public object? GetPacienteFromId([FromQuery] GetPacienteFromId param)
     {
         GetRequest<GetPacienteFromId, Paciente> request = new(param, Request);
@@ -232,6 +237,7 @@ public class ApiCeomedAplicacoes : ControllerBase
     [ProducesResponseType(typeof(ResponseValue<List<Cidade>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status500InternalServerError)]
     public object? GetCidadesFromEstado([FromQuery] GetCidadesParam param)
     {
         GetRequest<GetCidadesParam, List<Cidade>> request = new(param, Request);
@@ -265,6 +271,7 @@ public class ApiCeomedAplicacoes : ControllerBase
     [ProducesResponseType(typeof(ResponseValue<List<ConvenioMedico>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status500InternalServerError)]
     public object? GetConveniosMedicos([FromQuery] BaseParamApi param)
     {
         GetRequest<BaseParamApi, List<ConvenioMedico>> request = new(param, Request);
@@ -298,6 +305,7 @@ public class ApiCeomedAplicacoes : ControllerBase
     [ProducesResponseType(typeof(ResponseValue<List<CIDCategoriaSub>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status500InternalServerError)]
     public object? GetCidsFromParcialName([FromQuery] GetCidsFromParcialNameParam param)
     {
         GetRequest<GetCidsFromParcialNameParam, List<CIDCategoriaSub>> request = new(param, Request);
