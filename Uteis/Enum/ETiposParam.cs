@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace APICeomedAplicacoes.Uteis
+namespace APICeomedAplicacoes.Uteis.Enum
 {
     public enum ETiposParam
     {

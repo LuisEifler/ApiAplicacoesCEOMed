@@ -1,5 +1,5 @@
 ﻿using APICeomedAplicacoes.Conexao;
-using APICeomedAplicacoes.Uteis;
+using APICeomedAplicacoes.Uteis.Enum;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.SymbolStore;

@@ -1,6 +1,6 @@
 ﻿
 using APICeomedAplicacoes.Conexao;
-using APICeomedAplicacoes.Uteis;
+using APICeomedAplicacoes.Uteis.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Reflection;

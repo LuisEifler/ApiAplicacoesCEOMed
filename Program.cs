@@ -7,10 +7,10 @@ using APICeomedAplicacoes.Conexao;
 using APICeomedAplicacoes.Entidades;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using APICeomedAplicacoes.Uteis;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel;
+using APICeomedAplicacoes.Uteis.Swagger;
 
 
 var builder = WebApplication.CreateBuilder(args);

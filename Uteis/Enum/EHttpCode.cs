@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace APICeomedAplicacoes.Uteis
+namespace APICeomedAplicacoes.Uteis.Enum
 {
     public enum EHttpCode
     {

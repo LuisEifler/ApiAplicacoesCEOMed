@@ -1,5 +1,5 @@
 ﻿using APICeomedAplicacoes.Conexao;
-using APICeomedAplicacoes.Uteis;
+using APICeomedAplicacoes.Uteis.Enum;
 using Newtonsoft.Json.Linq;
 using System.Drawing;
 

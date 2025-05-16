@@ -1,4 +1,4 @@
-﻿namespace APICeomedAplicacoes.Uteis
+﻿namespace APICeomedAplicacoes.Models
 {
     public class ModelJsonFromDB
     {

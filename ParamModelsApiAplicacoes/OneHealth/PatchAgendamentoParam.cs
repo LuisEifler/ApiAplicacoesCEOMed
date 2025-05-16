@@ -1,4 +1,5 @@
 ﻿using APICeomedAplicacoes.Uteis;
+using APICeomedAplicacoes.Uteis.Enum;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace APICeomedAplicacoes.ParamModelsApiAplicacoes.OneHealth

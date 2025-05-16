@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace APICeomedAplicacoes.Uteis
+namespace APICeomedAplicacoes.Uteis.Enum
 {
     public enum EStatusAgendamento : long
     {
