@@ -46,15 +46,17 @@ namespace APICeomedAplicacoes.Models.Whatts
             string telefoneFormatado = mensagem.fromPhone.Replace("+", "");
             telefoneFormatado = telefoneFormatado.Length == 13 ? telefoneFormatado.Remove(5,1) : telefoneFormatado;
 
-            string chaveEnvio = DbHelper.Select<ClinicasEnvioWhatsApp>(x => x.NumeroTelefoneEnvio == telefoneFormatado)?.FirstOrDefault().Chave;
+            string tokenEnvio = DbHelper.Select<CelularesEnvioWhatsApp>(x => x.NumeroEnvio == telefoneFormatado)?.FirstOrDefault().Token;
 
             using (HttpClient client = new HttpClient())
             {
                 System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", chaveEnvio);
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", tokenEnvio);
                 client.DefaultRequestHeaders.Add("ContentType", "application/json");
 
                 var content = new StringContent(mensagem.ToJson(), Encoding.UTF8, "application/json");
+
+                await Task.Delay(new TimeSpan(0,0,40));
 
                 var response = await client.PostAsync($"https://app-utalk.umbler.com/api/v1/messages/simplified", content);
 
