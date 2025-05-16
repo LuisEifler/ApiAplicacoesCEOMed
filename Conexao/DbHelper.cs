@@ -795,8 +795,8 @@ namespace APICeomedAplicacoes.Conexao
 
         internal static string ToJson<T>(this T obj, bool indent = false)
         {
-            if (indent) return JsonConvert.SerializeObject(obj, Formatting.Indented);
-            return JsonConvert.SerializeObject(obj);
+            if (indent) return JsonConvert.SerializeObject(obj, Formatting.Indented).Replace("\\", "");
+            return JsonConvert.SerializeObject(obj).Replace("\\","");
         }
         internal static async Task<T> ToObject<T>(this HttpContent content)
         {
