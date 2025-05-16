@@ -14,13 +14,15 @@ using APICeomedAplicacoes.ParamModelsApiAplicacoes.OneHealth;
 using APICeomedAplicacoes.Uteis;
 using APICeomedAplicacoes.ParamModelsApiAplicacoes;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Text;
 
 [ApiController]
 [Route("api/v2/[action]")]
 public class ApiCeomedAplicacoes : ControllerBase
 {
     //TOKEN API
-    //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJxd2VFV1ExNTApJSFzQTIiLCJuYW1lIjoiQ0VPTUVEIiwiYWRtaW4iOnRydWUsImlzcyI6ImNlb21lZGFwbGljYWNvZXMiLCJhdWQiOiJjZW9tZWRhcGxpY2Fjb2VzIiwiaWF0IjoxNzEyNDgwMDAwLCJleHAiOjE3MTI1MDAwMDB9.nLx0usBQrCil2h2EjThq6ojAFMVfyexuq1tQOtlh8Sg
+    //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJxd2VFV1ExNTApJSFzQTIiLCJuYW1lIjoiT05FSEVBTFRIIiwiYWRtaW4iOiJ0cnVlIiwiaXNzIjoiY2VvbWVkYXBsaWNhY29lcyIsImF1ZCI6WyJjZW9tZWRhcGxpY2Fjb2VzIiwiY2VvbWVkYXBsaWNhY29lcyJdfQ.UUSV6fpPtNZhmMo_YJv35nmKGpCLoNQehi5OBPu0N90
     //Banco usado para teste dessa api é o tbCodigo = 98 | ceo_teste_cardiolife
 
     #region Metodos Get
@@ -353,7 +355,7 @@ public class ApiCeomedAplicacoes : ControllerBase
     [ProducesResponseType(typeof(Response), StatusCodes.Status500InternalServerError)]
     public object? Bloqueio([FromBody] PostBloqueioAgendaParam param)
     {
-        PostRequet<PostBloqueioAgendaParam> request = new(param,Request);
+        PostRequest<PostBloqueioAgendaParam> request = new(param,Request);
 
         try
         {
@@ -409,5 +411,50 @@ public class ApiCeomedAplicacoes : ControllerBase
     }
 
     #endregion
+
+    #region Metodos Patch
+
+    [Authorize]
+    [HttpPatch]
+    [SwaggerOperation(Summary = "Altera dados do Agendamento.")]
+    [ProducesResponseType(typeof(Response), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Response), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(Response), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Response), StatusCodes.Status500InternalServerError)]
+    [Route("/api/v2/[action]/{IdClinica}/{Id}")]
+    public object? Agendamento([SwaggerSchema("Id da Clinica encontrado no login do usuario")]
+                                [RequiredParam(ErrorMessage = "O campo IdClinica é obrigatório.")]
+                                Int64 IdClinica,
+                                [SwaggerSchema("Id do agendamento.")]
+                                [RequiredParam(ErrorMessage = "O campo Id é obrigatório.")]
+                                Int64 Id, 
+                                [FromBody] PatchAgendamentoParam param )
+    {
+
+        param.SetIdClinica(IdClinica);
+        param.SetIdAgendamento(Id);
+        PatchRequet<PatchAgendamentoParam> request = new(param, Request);
+
+        try
+        {
+            if (request.GetResponse().IsSuccess)
+            {
+                DbHelper.SetDbClienteConection(IdClinica);
+                request.paramsFromDb.Add("@Id", Id);
+                DbHelper.ExecuteScalar(request.updateCommand, request.paramsFromDb);
+
+            }
+            return request.GetResult();
+        }
+        catch (Exception ex)
+        {
+            request.GetResponse().AddError(ex.Message);
+            return request.GetResult(500);
+        }
+
+    }
+
+    #endregion
+
 }
 

@@ -23,7 +23,6 @@ namespace APICeomedAplicacoes.Controllers
         [ProducesResponseType(typeof(ResponseValue<List<LocalPainelChamada>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status400BadRequest)]
-        [ApiExplorerSettings(IgnoreApi = true)]
         public object? GetPainels([FromQuery] GetPaineisParam param)
         {
             GetRequest<GetPaineisParam, List<LocalPainelChamada>> request = new(param, Request);
@@ -50,7 +49,6 @@ namespace APICeomedAplicacoes.Controllers
         [ProducesResponseType(typeof(ResponseValue<GetLocationResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status400BadRequest)]
-        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<object>? GetLocation([FromQuery] GetLocationPainelParam param)
         {
             GetRequest<GetLocationPainelParam, GetLocationResponse> request = new(param, Request);
@@ -102,8 +100,7 @@ namespace APICeomedAplicacoes.Controllers
         [ProducesResponseType(typeof(ResponseValue<GetClimaResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status400BadRequest)]
-        [ApiExplorerSettings(IgnoreApi = true)]
-        public async Task<object>? GetClimica([FromQuery] GetClimaParam param)
+        public async Task<object>? GetClima([FromQuery] GetClimaParam param)
         {
             GetRequest<GetClimaParam, GetClimaResponse> request = new(param, Request);
             try

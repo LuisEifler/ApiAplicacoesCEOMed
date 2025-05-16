@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 var secretKey = "06NFE1u8WoZrg4M9LITf7pSVigOcN3J5CrjOeMqLX0m1nZBsccegbtTk0NVhnqNOhNlL7VkKv4Gm8LCQ7fNz2FGHMTo8WRWZXKF1rz2lqiro=";
@@ -44,7 +45,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 Response response = Response.Error();
                 response.AddError("ApiToken ausente ou inválido.");
                 response.Code = 401;
-                response.traceId = LogAPIAplicacoes.GravarLog(response, context.Request, context.Request.Method == "POST" ? context.HttpContext.Items["RawBody"] as string : null).Result;
+                response.traceId = LogAPIAplicacoes.GravarLog(response, context.Request, context.Request.Method is "POST" or "PATCH" ? context.HttpContext.Items["RawBody"] as string : null).Result;
                 var result = System.Text.Json.JsonSerializer.Serialize(response);
 
                 return context.Response.WriteAsync(result);
@@ -58,7 +59,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 response.AddError("ApiToken ausente ou inválido.");
                 response.Code = 401;
                 
-                response.traceId = LogAPIAplicacoes.GravarLog(response, context.Request, context.Request.Method == "POST" ? context.HttpContext.Items["RawBody"] as string : null).Result;
+                response.traceId = LogAPIAplicacoes.GravarLog(response, context.Request, context.Request.Method is "POST" or "PATCH" ? context.HttpContext.Items["RawBody"] as string : null).Result;
                 
                 var result = System.Text.Json.JsonSerializer.Serialize(response);
 
@@ -99,7 +100,7 @@ builder.Services.AddControllers()
                 response.AddError($"O valor enviado para '{erro?.Campo}' é inválido.", "Parametrôs invalidos.");
             }
            
-            response.traceId = LogAPIAplicacoes.GravarLog(response, context.HttpContext.Request, context.HttpContext.Request.Method == "POST" ? context.HttpContext.Items["RawBody"] as string : null).Result;
+            response.traceId = LogAPIAplicacoes.GravarLog(response, context.HttpContext.Request, context.HttpContext.Request.Method is "POST" or "PATCH" ? context.HttpContext.Items["RawBody"] as string : null).Result;
 
 
             return new BadRequestObjectResult(response);
@@ -184,11 +185,16 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = "api";
     c.DocumentTitle = "API Aplicações CEOMed";
 
+    c.HeadContent = @"
+        <link rel='icon' type='image/x-icon' href='/swagger-ui/ceoicon.ico' />
+        <meta http-equiv='cache-control' content='no-cache' />
+        <meta http-equiv='expires' content='0' />
+        <meta http-equiv='pragma' content='no-cache' />
+    ";    
     // CSS e JS customizados
     c.InjectStylesheet("../swagger-ui/custom.css");
-    //c.InjectJavascript("/swagger-ui/custom.js");
+    //c.InjectJavascript("../swagger-ui/custom.js");ss
 
-    // Outras configs visuais
     c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.List); // fecha os endpoints
     c.DefaultModelsExpandDepth(-1); // oculta os modelos
 });
@@ -200,8 +206,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-Util.Log(" a88888b.                                             dP\r\nd8'   `88                                             88 \r\n88        .d8888b. .d8888b. 88d8b.d8b. .d8888b. .d888b88 \r\n88        88ooood8 88'  `88 88'`88'`88 88ooood8 88'  `88 \r\nY8.   .88 88.  ... 88.  .88 88  88  88 88.  ... 88.  .88 \r\n Y88888P' `88888P' `88888P' dP  dP  dP `88888P' `88888P8",ConsoleColor.Cyan);
+Util.Log(" a88888b.                                             dP\r\nd8'   `88                                             88 \r\n88        .d8888b. .d8888b. 88d8b.d8b. .d8888b. .d888b88 \r\n88        88ooood8 88'  `88 88'`88'`88 88ooood8 88'  `88 \r\nY8.   .88 88.  ... 88.  .88 88  88  88 88.  ... 88.  .88 \r\n Y88888P' `88888P' `88888P' dP  dP  dP `88888P' `88888P8", ConsoleColor.Cyan);
 app.Run();
+
 // a88888b.                                             dP
 //d8'   `88                                             88 
 //88        .d8888b. .d8888b. 88d8b.d8b. .d8888b. .d888b88 
