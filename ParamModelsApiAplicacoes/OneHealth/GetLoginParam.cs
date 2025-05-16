@@ -1,4 +1,6 @@
 ﻿using APICeomedAplicacoes.Uteis;
+using APICeomedAplicacoes.Uteis.Attributes;
+using APICeomedAplicacoes.Uteis.Swagger;
 using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 
@@ -8,6 +10,7 @@ namespace APICeomedAplicacoes.ParamModelsApiAplicacoes.OneHealth
     {
         [SwaggerSchema("Login/Email do usuario")]
         [RequiredParam("O campo login é obrigatório.")]
+        [ExampleValue("example@email.com")]
         public string? login { get; set; }
 
         [SwaggerSchema("Senha do usuario")] 

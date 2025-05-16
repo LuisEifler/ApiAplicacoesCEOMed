@@ -7,10 +7,11 @@ using APICeomedAplicacoes.Conexao;
 using APICeomedAplicacoes.Entidades;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using APICeomedAplicacoes.Uteis;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel;
+using APICeomedAplicacoes.Uteis.Swagger;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,7 +45,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 Response response = Response.Error();
                 response.AddError("ApiToken ausente ou inválido.");
                 response.Code = 401;
-                response.traceId = LogAPIAplicacoes.GravarLog(response, context.Request, context.Request.Method == "POST" ? context.HttpContext.Items["RawBody"] as string : null).Result;
+                response.traceId = LogAPIAplicacoes.GravarLog(response, context.Request, context.Request.Method is "POST" or "PATCH" ? context.HttpContext.Items["RawBody"] as string : null).Result;
                 var result = System.Text.Json.JsonSerializer.Serialize(response);
 
                 return context.Response.WriteAsync(result);
@@ -58,7 +59,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 response.AddError("ApiToken ausente ou inválido.");
                 response.Code = 401;
                 
-                response.traceId = LogAPIAplicacoes.GravarLog(response, context.Request, context.Request.Method == "POST" ? context.HttpContext.Items["RawBody"] as string : null).Result;
+                response.traceId = LogAPIAplicacoes.GravarLog(response, context.Request, context.Request.Method is "POST" or "PATCH" ? context.HttpContext.Items["RawBody"] as string : null).Result;
                 
                 var result = System.Text.Json.JsonSerializer.Serialize(response);
 
@@ -69,7 +70,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 TypeDescriptor.AddAttributes(typeof(int?), new TypeConverterAttribute(typeof(NullableIntConverter)));
-
 
 builder.Services.AddAuthorization();
 
@@ -99,7 +99,7 @@ builder.Services.AddControllers()
                 response.AddError($"O valor enviado para '{erro?.Campo}' é inválido.", "Parametrôs invalidos.");
             }
            
-            response.traceId = LogAPIAplicacoes.GravarLog(response, context.HttpContext.Request, context.HttpContext.Request.Method == "POST" ? context.HttpContext.Items["RawBody"] as string : null).Result;
+            response.traceId = LogAPIAplicacoes.GravarLog(response, context.HttpContext.Request, context.HttpContext.Request.Method is "POST" or "PATCH" ? context.HttpContext.Items["RawBody"] as string : null).Result;
 
 
             return new BadRequestObjectResult(response);
@@ -111,6 +111,8 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "API Aplicações CEOMed", Version = "v2" });
     c.EnableAnnotations();
+    c.SchemaFilter<ExampleValueFilter>();
+    c.OperationFilter<FromQueryExampleOperationFilter>();
     var securityScheme = new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -120,6 +122,7 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "bearer",
         BearerFormat = "JWT"
     };
+
 
     c.AddSecurityDefinition("Bearer", securityScheme);
 
@@ -157,7 +160,6 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins",
@@ -186,9 +188,7 @@ app.UseSwaggerUI(c =>
 
     // CSS e JS customizados
     c.InjectStylesheet("../swagger-ui/custom.css");
-    //c.InjectJavascript("/swagger-ui/custom.js");
-
-    // Outras configs visuais
+    c.InjectJavascript("../swagger-ui/custom.js");
     c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.List); // fecha os endpoints
     c.DefaultModelsExpandDepth(-1); // oculta os modelos
 });
@@ -200,8 +200,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-Util.Log(" a88888b.                                             dP\r\nd8'   `88                                             88 \r\n88        .d8888b. .d8888b. 88d8b.d8b. .d8888b. .d888b88 \r\n88        88ooood8 88'  `88 88'`88'`88 88ooood8 88'  `88 \r\nY8.   .88 88.  ... 88.  .88 88  88  88 88.  ... 88.  .88 \r\n Y88888P' `88888P' `88888P' dP  dP  dP `88888P' `88888P8",ConsoleColor.Cyan);
+Util.Log(" a88888b.                                             dP\r\nd8'   `88                                             88 \r\n88        .d8888b. .d8888b. 88d8b.d8b. .d8888b. .d888b88 \r\n88        88ooood8 88'  `88 88'`88'`88 88ooood8 88'  `88 \r\nY8.   .88 88.  ... 88.  .88 88  88  88 88.  ... 88.  .88 \r\n Y88888P' `88888P' `88888P' dP  dP  dP `88888P' `88888P8", ConsoleColor.Cyan);
 app.Run();
+
 // a88888b.                                             dP
 //d8'   `88                                             88 
 //88        .d8888b. .d8888b. 88d8b.d8b. .d8888b. .d888b88 

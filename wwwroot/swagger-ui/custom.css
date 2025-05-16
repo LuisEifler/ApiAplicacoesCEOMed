@@ -1,5 +1,7 @@
 ﻿.swagger-ui .topbar {
-    background-color: rgb(18, 179, 133) !important; /* Azul */
+    /*background-color: rgb(18, 179, 133) !important;*/ /* Azul */
+    background-color: #61affe !important;
+    position: relative;
 }
 
 .swagger-ui .info {
@@ -8,14 +10,34 @@
     border-radius: 5px;
 }
 
+.swagger-ui .topbar-wrapper{
+    display:flex;
+}
+
 .swagger-ui .topbar-wrapper img {
     content: url('/swagger-ui/ceomedlogo.png');
+    height: 60px;
+}
+
+.swagger-ui .topbar::after {
+    display: flex;
+    position: absolute;
+    bottom: -3px;
+    width: 100%;
+    height: 3px;
+    background-image: linear-gradient(to right,white,#3dafda,#13b486,#3dafda,white);
+    content: '';
 }
 
 hgroup.main > .link,
 .swagger-ui .info .title small.version-stamp,
-.topbar-wrapper  .download-url-wrapper  .select-label {
+.topbar-wrapper .download-url-wrapper .select-label,
+.topbar-wrapper > .link {
     display: none !important;
 }
 
-
+.painelLateral{
+    height:100vh;
+    width:80px;
+    background-color:red
+}

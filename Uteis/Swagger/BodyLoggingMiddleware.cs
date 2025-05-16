@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace APICeomedAplicacoes.Uteis
+namespace APICeomedAplicacoes.Uteis.Swagger
 {
     public class BodyLoggingMiddleware
     {

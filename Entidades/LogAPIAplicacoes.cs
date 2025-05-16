@@ -36,19 +36,22 @@ namespace APICeomedAplicacoes.Entidades
 
             string ClinicaId = httpRequest.Query.Where(x => x.Key == "IdClinica").FirstOrDefault().Value;
 
-
-            string token = httpRequest.Headers["Authorization"].ToString().Replace("Bearer ", "");
-            Int64? IdAplicacao = DbHelper.Select<ApiAccessTokens>(x => x.ApiToken == token).FirstOrDefault()?.Id;
-
             Int64 idClinica = 0;
 
             Int64.TryParse(ClinicaId, out idClinica);
-           
+
+            if (idClinica == 0) ClinicaId = httpRequest.Path.Value.ExtractIdFromUrl(4).ToString();
+
+            Int64.TryParse(ClinicaId, out idClinica);
+
+            string token = httpRequest.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            Int64? IdAplicacao = httpRequest.Path.Value.Contains("utalk") ? 2 : DbHelper.Select<ApiAccessTokens>(x => x.ApiToken == token).FirstOrDefault()?.Id;
+
             LogAPIAplicacoes log = new LogAPIAplicacoes()
             {
                 IdAplicacao = IdAplicacao,
                 IdClinica = idClinica == 0 ? null : idClinica,
-                RequestStatus = 0,
+                RequestStatus = response.IsSuccess ? 1 : 0,
                 Response = JsonConvert.SerializeObject(response),
                 Message = mensagem,
                 Data = DateTime.Now,

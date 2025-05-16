@@ -3,6 +3,7 @@ using APICeomedAplicacoes.Conexao;
 using APICeomedAplicacoes.Entidades;
 using APICeomedAplicacoes.Seguranca;
 using APICeomedAplicacoes.Uteis;
+using APICeomedAplicacoes.Uteis.Enum;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -12,6 +13,7 @@ using Newtonsoft.Json.Linq;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Data;
 using System.Reflection;
+using System.Text;
 
 namespace APICeomedAplicacoes.Base
 {
@@ -35,6 +37,21 @@ namespace APICeomedAplicacoes.Base
 
         public virtual Response GetResponse() { return response; }
 
+
+        public async Task<string> GetRequestBody()
+        {
+            this.httpRequest.EnableBuffering();
+
+            this.httpRequest.Body.Position = 0;
+            using var reader = new StreamReader(this.httpRequest.Body, Encoding.UTF8, leaveOpen: true);
+            var jsonString = await reader.ReadToEndAsync();
+
+            this.httpRequest.Body.Position = 0;
+
+            return jsonString;
+        }
+
+        
         public virtual ObjectResult GetResult(int? code = null)
         {
             this.response.Code = code.IsNull() ? this.response.Code : code.Value;
@@ -106,8 +123,7 @@ namespace APICeomedAplicacoes.Base
 
         virtual public void GravarLog()
         {
-            this.response.traceId = LogAPIAplicacoes.GravarLog(this.response,this.httpRequest, this.httpRequest.Method is "POST" or "PATCH" ? JsonConvert.SerializeObject(this.param) : null).Result;
+            this.response.traceId = LogAPIAplicacoes.GravarLog(this.response,this.httpRequest, this.httpRequest.Method is "POST" or "PATCH" ? this.GetRequestBody().Result : null).Result;
         }
-
     }
 }

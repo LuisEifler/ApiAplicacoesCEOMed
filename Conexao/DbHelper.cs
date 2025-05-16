@@ -763,6 +763,51 @@ namespace APICeomedAplicacoes.Conexao
 
             Debug.WriteLine(message);
         }
+
+        public static string FirstLetterLower(this string str)
+        {
+            str = str.Substring(0, 1).ToLower() + str.Substring(1);
+            return str;
+        }
+
+        public static int ExtractIdFromUrl(this string url, int segmentIndex)
+        {
+            var segments = url.Split('/');
+            if (segments.Length > segmentIndex && int.TryParse(segments[segmentIndex], out int id))
+            {
+                return id;
+            }
+            return -1;
+        }
+        internal static FormUrlEncodedContent ToEncondedContent<T>(this T obj)
+        {
+            return new FormUrlEncodedContent(obj.ToKeyValueList());
+        }
+        internal static Dictionary<string, string> ToKeyValueList<T>(this T obj)
+        {
+            return obj.GetType()
+              .GetProperties()
+              .ToDictionary(
+                x => x.Name,
+                x => x.GetValue(obj, null).ToString()
+              );
+        }
+
+        internal static string ToJson<T>(this T obj, bool indent = false)
+        {
+            if (indent) return JsonConvert.SerializeObject(obj, Formatting.Indented);
+            return JsonConvert.SerializeObject(obj);
+        }
+        internal static async Task<T> ToObject<T>(this HttpContent content)
+        {
+            T value = default;
+
+            var result = await content.ReadAsStringAsync();
+            try { value = JsonConvert.DeserializeObject<T>(result); }
+            catch (JsonSerializationException) { }
+
+            return value;
+        }
     }
 
     public static class Extencions
