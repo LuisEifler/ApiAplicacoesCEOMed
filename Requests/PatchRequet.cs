@@ -43,7 +43,7 @@ namespace APICeomedAplicacoes.Requests
 
             foreach (var prop in param.GetType().GetRuntimeProperties())
             {
-                string name = prop.Name.FristLetterLower();
+                string name = prop.Name.FirstLetterLower();
                 if (json.ContainsKey(name))
                 {
                     ColumnInfo attr = (ColumnInfo)Attribute.GetCustomAttribute(prop,typeof(ColumnInfo));

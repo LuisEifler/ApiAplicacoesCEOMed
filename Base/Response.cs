@@ -1,5 +1,6 @@
 ﻿
 using APICeomedAplicacoes.Conexao;
+using APICeomedAplicacoes.Uteis.Attributes;
 using APICeomedAplicacoes.Uteis.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -32,12 +33,16 @@ namespace APICeomedAplicacoes.Base
 
         public bool IsSuccess { get; set; }
 
+        [ExampleValue("Sucesso.")]
         public string? message { get; set; }
 
+        [ExampleValue("6546")]
         public string? traceId { get; set; }
-
+        
+        [ExampleValue(200)]
         public int Code { get; set; } = 200;
-
+        
+        [ExampleValue("OK: A solicitação foi bem-sucedida.")]
         public string codeMessage { get { return ((EHttpCode)this.Code).Descricao(); } }
 
         public List<ValueError>? errors { get; set; }

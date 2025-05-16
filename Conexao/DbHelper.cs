@@ -764,7 +764,7 @@ namespace APICeomedAplicacoes.Conexao
             Debug.WriteLine(message);
         }
 
-        public static string FristLetterLower(this string str)
+        public static string FirstLetterLower(this string str)
         {
             str = str.Substring(0, 1).ToLower() + str.Substring(1);
             return str;
