@@ -1,5 +1,6 @@
 ﻿.swagger-ui .topbar {
     background-color: rgb(18, 179, 133) !important; /* Azul */
+    /*background-color: #537aefk !important;*/ /* Azul */
 }
 
 .swagger-ui .info {
@@ -18,4 +19,8 @@ hgroup.main > .link,
     display: none !important;
 }
 
-
+.painelLateral{
+    height:100vh;
+    width:80px;
+    background-color:red
+}

@@ -24,7 +24,6 @@ namespace APICeomedAplicacoes.Controllers
         [ProducesResponseType(typeof(ResponseValue<List<ChatInternoContatos>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status400BadRequest)]
-        [ApiExplorerSettings(IgnoreApi = true)]
         public object? GetConversas([FromQuery] GetConversasParam param)
         {
             GetRequest<GetConversasParam, List<ChatInternoContatos>> request = new(param, Request);
@@ -52,7 +51,6 @@ namespace APICeomedAplicacoes.Controllers
         [ProducesResponseType(typeof(ResponseValue<GetMensagensResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status400BadRequest)]
-        [ApiExplorerSettings(IgnoreApi = true)]
         public object? GetMensagens([FromQuery] GetMensagensParam param)
         {
             GetRequest<GetMensagensParam, GetMensagensResponse> request = new(param, Request);
@@ -95,7 +93,6 @@ namespace APICeomedAplicacoes.Controllers
         [ProducesResponseType(typeof(ResponseValue<List<WebUsuario>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status400BadRequest)]
-        [ApiExplorerSettings(IgnoreApi = true)]
         public object? GetContatos([FromQuery] BaseParamApi param)
         {
             GetRequest<BaseParamApi, List<WebUsuario>> request = new(param, Request);
