@@ -1,4 +1,6 @@
-﻿namespace APICeomedAplicacoes.Uteis
+﻿using APICeomedAplicacoes.Uteis.Enum;
+
+namespace APICeomedAplicacoes.Uteis
 {
     public class ColumnInfo : Attribute
     {

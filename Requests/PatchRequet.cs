@@ -2,6 +2,7 @@
 using APICeomedAplicacoes.Conexao;
 using APICeomedAplicacoes.ParamModelsApiAplicacoes;
 using APICeomedAplicacoes.Uteis;
+using APICeomedAplicacoes.Uteis.Enum;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.OpenApi.Extensions;
 using Newtonsoft.Json.Linq;

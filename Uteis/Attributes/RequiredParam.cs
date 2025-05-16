@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using APICeomedAplicacoes.Uteis.Enum;
+using System.ComponentModel.DataAnnotations;
 
 namespace APICeomedAplicacoes.Uteis
 {

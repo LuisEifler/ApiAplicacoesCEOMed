@@ -16,6 +16,7 @@ using APICeomedAplicacoes.ParamModelsApiAplicacoes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Text;
+using APICeomedAplicacoes.Models;
 
 [ApiController]
 [Route("api/v2/[action]")]

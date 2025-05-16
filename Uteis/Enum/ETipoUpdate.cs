@@ -1,4 +1,4 @@
-﻿namespace APICeomedAplicacoes.Uteis
+﻿namespace APICeomedAplicacoes.Uteis.Enum
 {
     public enum ETipoUpdate
     {

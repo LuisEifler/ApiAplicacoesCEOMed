@@ -3,6 +3,7 @@ using APICeomedAplicacoes.Conexao;
 using APICeomedAplicacoes.Entidades;
 using APICeomedAplicacoes.Seguranca;
 using APICeomedAplicacoes.Uteis;
+using APICeomedAplicacoes.Uteis.Enum;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
