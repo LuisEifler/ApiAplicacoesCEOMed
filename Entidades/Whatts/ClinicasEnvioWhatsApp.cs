@@ -2,9 +2,9 @@
 
 namespace APICeomedAplicacoes.Entidades.Whatts
 {
-    public class ClinicasEnvioWhatsApp : TableBase
+    public class CelularesEnvioWhatsApp : TableBase
     {
-        public string Chave { get;set;}
-        public string NumeroTelefoneEnvio { get;set;}
+        public string Token { get;set;}
+        public string NumeroEnvio { get;set;}
     }
 }

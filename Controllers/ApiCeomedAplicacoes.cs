@@ -86,6 +86,7 @@ public class ApiCeomedAplicacoes : ControllerBase
         }
     }
 
+
     [HttpGet]
     [Authorize]
     [SwaggerOperation(Summary = "Consultar profissionais")]
@@ -349,7 +350,7 @@ public class ApiCeomedAplicacoes : ControllerBase
 
     [Authorize]
     [HttpPost]
-    [SwaggerOperation(Summary = "Blqueia um determinado horario.")]
+    [SwaggerOperation(Summary = "Bloqueia um determinado horario.")]
     [ProducesResponseType(typeof(Response), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(Response), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(Response), StatusCodes.Status400BadRequest)]
@@ -376,6 +377,40 @@ public class ApiCeomedAplicacoes : ControllerBase
         }
 
     }
+
+
+    [Authorize]
+    [HttpPost]
+    [SwaggerOperation(Summary = "Cria um agendamento.")]
+    [ProducesResponseType(typeof(Response), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(Response), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(Response), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Response), StatusCodes.Status500InternalServerError)]
+    public object? Agendamento([FromBody] PostAgendamentoParam param)
+    {
+        PostRequest<PostAgendamentoParam> request = new(param, Request);
+
+        try
+        {
+            throw new NotImplementedException("Metodo de agendamento em desenvolvimento.");
+            if (request.GetResponse().IsSuccess)
+            {
+                DbHelper.SetDbClienteConection(request.param.IdClinica);
+
+
+
+                //if (id != -1) request.GetResponse().Code = 201;
+            }
+            return request.GetResult();
+        }
+        catch (Exception ex)
+        {
+            request.GetResponse().AddError(ex.Message);
+            return request.GetResult(500);
+        }
+
+    }
+
 
     #endregion
 

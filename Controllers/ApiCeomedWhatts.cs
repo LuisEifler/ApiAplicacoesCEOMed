@@ -74,6 +74,7 @@ namespace APICeomedAplicacoes.Controllers
                         if (messageResponse != null && messageResponse.HasMessage())
                         {
                             SentMessage msg = new SentMessage(param, messageResponse.MessageReturn);
+                            //msg.toPhone = "+5544984626745";
                             var response = await param.SendMessageResponse(msg);
                             var content = await response.Content.ToObject<UTalkResponse>();
 
