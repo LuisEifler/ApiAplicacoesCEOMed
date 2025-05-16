@@ -4,6 +4,7 @@ using APICeomedAplicacoes.Uteis.Attributes;
 using APICeomedAplicacoes.Uteis.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Reflection;
 
 namespace APICeomedAplicacoes.Base
@@ -44,6 +45,10 @@ namespace APICeomedAplicacoes.Base
         
         [ExampleValue("OK: A solicitação foi bem-sucedida.")]
         public string codeMessage { get { return ((EHttpCode)this.Code).Descricao(); } }
+
+        [SwaggerSchema("Informações adicionais da requisição. (Só retorna quando necessário.)")]
+        [ExampleValue(null)]
+        public List<string>? additionalInfoMessages { get; set; } = null;
 
         public List<ValueError>? errors { get; set; }
 

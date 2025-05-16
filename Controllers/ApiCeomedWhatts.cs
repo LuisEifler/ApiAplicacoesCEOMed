@@ -16,6 +16,7 @@ using System.Net;
 using Newtonsoft.Json.Linq;
 using Microsoft.OpenApi.Expressions;
 using APICeomedAplicacoes.Models.Whatts;
+using APICeomedAplicacoes.Uteis.Enum;
 
 namespace APICeomedAplicacoes.Controllers
 {
@@ -82,8 +83,14 @@ namespace APICeomedAplicacoes.Controllers
                             {
                                 request.GetResponse().AddError($"Utalk HTTP Status Response is {(int)response.StatusCode}");
                                 request.GetResponse().AddError("Mensagem potencialmente não entregue");
-                                request.GetResponse().AddError(msg.ToJson());
-                                request.GetResponse().AddError("Resposta da API uTalk:\n" + content.ToJson());
+                                request.GetResponse().AddError(msg.ToJson(true));
+                                request.GetResponse().AddError("Resposta da API uTalk:\n" + content.ToJson(true));
+                            }
+                            else
+                            {
+                                request.AddAdditionalMessage($"Utalk HTTP Status Response is {(int)response.StatusCode}: {((EHttpCode)(int)response.StatusCode).Descricao()}");
+                                request.AddAdditionalMessage($"Mensagem enviada: {msg.ToJson(true)}");
+                                request.AddAdditionalMessage("Resposta da API uTalk: " + content.ToJson(true));
                             }
                         }
                         break;

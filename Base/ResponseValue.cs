@@ -15,6 +15,7 @@ namespace APICeomedAplicacoes.Base
             this.IsSuccess = responseBase.IsSuccess;
             this.message = responseBase.message;
             this.errors = responseBase.errors;
+            this.additionalInfoMessages = responseBase.additionalInfoMessages;
         }
         public ResponseValue() { this.Value = default(T); }
 

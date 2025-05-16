@@ -37,6 +37,13 @@ namespace APICeomedAplicacoes.Base
 
         public virtual Response GetResponse() { return response; }
 
+        public virtual void AddAdditionalMessage(string message)
+        {
+            if (this.response.additionalInfoMessages == null)
+                this.response.additionalInfoMessages = new List<string>();
+
+            this.response.additionalInfoMessages.Add(message);
+        }
 
         public async Task<string> GetRequestBody()
         {
