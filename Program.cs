@@ -71,7 +71,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 TypeDescriptor.AddAttributes(typeof(int?), new TypeConverterAttribute(typeof(NullableIntConverter)));
 
-
 builder.Services.AddAuthorization();
 
 builder.Services.AddControllers()
@@ -112,6 +111,8 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "API Aplicações CEOMed", Version = "v2" });
     c.EnableAnnotations();
+    c.SchemaFilter<ExampleValueFilter>();
+    c.OperationFilter<FromQueryExampleOperationFilter>();
     var securityScheme = new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -121,6 +122,7 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "bearer",
         BearerFormat = "JWT"
     };
+
 
     c.AddSecurityDefinition("Bearer", securityScheme);
 
@@ -158,7 +160,6 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins",
@@ -185,16 +186,9 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = "api";
     c.DocumentTitle = "API Aplicações CEOMed";
 
-    c.HeadContent = @"
-        <link rel='icon' type='image/x-icon' href='/swagger-ui/ceoicon.ico' />
-        <meta http-equiv='cache-control' content='no-cache' />
-        <meta http-equiv='expires' content='0' />
-        <meta http-equiv='pragma' content='no-cache' />
-    ";    
     // CSS e JS customizados
     c.InjectStylesheet("../swagger-ui/custom.css");
-    //c.InjectJavascript("../swagger-ui/custom.js");ss
-
+    c.InjectJavascript("../swagger-ui/custom.js");
     c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.List); // fecha os endpoints
     c.DefaultModelsExpandDepth(-1); // oculta os modelos
 });
