@@ -31,7 +31,7 @@ namespace APICeomedAplicacoes.Controllers
         [Route("api/utalk")]
         public async Task<object?> Utalk([FromBody] HookEvent param)
         {
-            PostRequest<HookEvent> request = new(param, Request);
+            PostRequest<HookEvent> request = new(param, Request, HttpContext);
             try
             {
                 switch (param.Event)
@@ -63,43 +63,56 @@ namespace APICeomedAplicacoes.Controllers
         [Route("api/utalkv2")]
         public async Task<object?> UtalkV2()
         {
-
-            PostRequest<string> request = new("", Request);
-            UtalkParam param = JsonConvert.DeserializeObject<UtalkParam>(await request.GetRequestBody());
+            
+            PostRequest<string> request = new("", Request, HttpContext);
+            UtalkParam param = JsonConvert.DeserializeObject<UtalkParam>(request.GetRequestBody());
             try
             {
-                switch (param.Type)
+                if (param.Payload.Content.LastMessage.SentByOrganizationMember.IsNotNull())
                 {
-                    case EventType.Message:
-                        DbMessageResponse messageResponse = param.GetDbResponse();
-                        if (messageResponse != null && messageResponse.HasMessage())
-                        {
-                            SentMessage msg = new SentMessage(param, messageResponse.MessageReturn);
-                            //msg.toPhone = "+5544984626745";
-                            var response = await param.SendMessageResponse(msg);
-                            var content = await response.Content.ToObject<UTalkResponse>();
-
-                            if (!response.IsSuccessStatusCode || content?.Status == "offline")
-                            {
-                                request.GetResponse().AddError($"Utalk HTTP Status Response is {(int)response.StatusCode}");
-                                request.GetResponse().AddError("Mensagem potencialmente não entregue");
-                                request.GetResponse().AddError(msg.ToJson(true));
-                                request.GetResponse().AddError("Resposta da API uTalk:\n" + content.ToJson(true));
-                            }
-                            else
-                            {
-                                request.AddAdditionalMessage($"Utalk HTTP Status Response is {(int)response.StatusCode}: {((EHttpCode)(int)response.StatusCode).Descricao()}");
-                                request.AddAdditionalMessage($"Mensagem enviada: {msg.ToJson(true)}");
-                                request.AddAdditionalMessage("Resposta da API uTalk: " + content.ToJson(true));
-                            }
-                        }
-                        break;
-
-                    case EventType.StatusChange:
-                        // Aqui chega o evento de leitura da mensagem do Whats
-                        // O objeto 'hook' contém as informações que chegou
-                        break;
+                    request.AddAdditionalMessage($"ESSA MENSAGEM FOI ENVIADO POR {param.Payload.Content.LastMessage.SentByOrganizationMember.Id}, PORTANTO FOI DESCONSIDERADA.");
+                    return request.GetResult();
                 }
+                else if (param.Requestduplicate(param.EventId))
+                {
+                    request.AddAdditionalMessage($"ESSA MENSAGEM FOI REENVIADA PELO UTALK POR CONTA DO DELAY NO WEBHOOK, PORTANTO FOI DESCONSIDERADA.");
+                    return request.GetResult();
+                }
+
+                request.GravarLog();
+
+                switch (param.Type)
+                    {
+                        case EventType.Message:
+                            DbMessageResponse messageResponse = param.GetDbResponse();
+                            if (messageResponse != null && messageResponse.HasMessage())
+                            {
+                                SentMessage msg = new SentMessage(param, messageResponse.MessageReturn);
+                                //msg.toPhone = "+5544984626745";
+                                var response = await param.SendMessageResponse(msg);
+                                var content = await response.Content.ToObject<UTalkResponse>();
+
+                                if (!response.IsSuccessStatusCode || content?.Status == "offline")
+                                {
+                                    request.GetResponse().AddError($"Utalk HTTP Status Response is {(int)response.StatusCode}");
+                                    request.GetResponse().AddError("Mensagem potencialmente não entregue");
+                                    request.GetResponse().AddError(msg.ToJson(true));
+                                    request.GetResponse().AddError("Resposta da API uTalk:\n" + content.ToJson(true));
+                                }
+                                else
+                                {
+                                    request.AddAdditionalMessage($"Utalk HTTP Status Response is {(int)response.StatusCode}: {((EHttpCode)(int)response.StatusCode).Descricao()}");
+                                    request.AddAdditionalMessage($"Mensagem enviada: {msg.ToJson(true)}");
+                                    request.AddAdditionalMessage("Resposta da API uTalk: " + content.ToJson(true));
+                                }
+                            }
+                            break;
+
+                        case EventType.StatusChange:
+                            // Aqui chega o evento de leitura da mensagem do Whats
+                            // O objeto 'hook' contém as informações que chegou
+                            break;
+                    }
 
                 return request.GetResult();
             }

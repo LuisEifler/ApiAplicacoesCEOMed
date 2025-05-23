@@ -21,16 +21,18 @@ namespace APICeomedAplicacoes.Base
     {
 
         public BaseRequest() { response = Response.Success(); }
-        public BaseRequest(T? param, HttpRequest? defaultRequest = null)
+        public BaseRequest(T? param, HttpRequest? defaultRequest = null, HttpContext context = null)
         {
             this.param = param;
             this.httpRequest = defaultRequest;
+            this.httpContext = context;
             response = Response.Success();
             VerifyParam();
         }
 
         public T? param { get; set; }
         public HttpRequest httpRequest { get; set; }
+        public HttpContext httpContext { get; set; }
         public int ambiente { get { return httpRequest == null ? 0 : httpRequest.Host.Host.Contains("localhost") || httpRequest.Path.Value.Contains("v2") ? 1 : 0; } }
 
         protected Response response { get; set; }
@@ -45,15 +47,9 @@ namespace APICeomedAplicacoes.Base
             this.response.additionalInfoMessages.Add(message);
         }
 
-        public async Task<string> GetRequestBody()
+        public string GetRequestBody()
         {
-            this.httpRequest.EnableBuffering();
-
-            this.httpRequest.Body.Position = 0;
-            using var reader = new StreamReader(this.httpRequest.Body, Encoding.UTF8, leaveOpen: true);
-            var jsonString = await reader.ReadToEndAsync();
-
-            this.httpRequest.Body.Position = 0;
+            string jsonString  = httpContext.Items["RawBody"]?.ToString();
 
             return jsonString;
         }
@@ -130,7 +126,7 @@ namespace APICeomedAplicacoes.Base
 
         virtual public void GravarLog()
         {
-            this.response.traceId = LogAPIAplicacoes.GravarLog(this.response,this.httpRequest, this.httpRequest.Method is "POST" or "PATCH" ? this.GetRequestBody().Result : null).Result;
+            this.response.traceId = LogAPIAplicacoes.GravarLog(this.response,this.httpRequest, this.httpRequest.Method is "POST" or "PATCH" ? this.GetRequestBody() : null).Result;
         }
     }
 }

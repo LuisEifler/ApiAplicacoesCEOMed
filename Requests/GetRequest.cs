@@ -8,7 +8,7 @@ namespace APICeomedAplicacoes.Requests
     public class GetRequest<T,TR> : BaseRequest<T>
     {
         public GetRequest() : base() { }
-        public GetRequest(T? param, HttpRequest? defaultRequest = null) : base(param, defaultRequest)
+        public GetRequest(T? param, HttpRequest? defaultRequest = null, HttpContext context = null) : base(param, defaultRequest, context)
         {
             this.responseValue = base.response.ToResponseValue<TR>();
         }

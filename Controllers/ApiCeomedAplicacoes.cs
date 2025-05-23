@@ -38,7 +38,7 @@ public class ApiCeomedAplicacoes : ControllerBase
     [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status500InternalServerError)]
     public object? Login([FromQuery] GetLoginParam param)
     {
-        GetRequest<GetLoginParam, Usuario> request = new(param, Request);
+        GetRequest<GetLoginParam, Usuario> request = new(param, Request, HttpContext);
         try
         {
             Usuario usuarioEncontrado = null;
@@ -97,7 +97,7 @@ public class ApiCeomedAplicacoes : ControllerBase
     public object? GetProfissionais([FromQuery] GetProfissionaisParam param)
     {
 
-        GetRequest<GetProfissionaisParam, List<Profissional>> request = new(param, Request);
+        GetRequest<GetProfissionaisParam, List<Profissional>> request = new(param, Request, HttpContext);
         try
         {
             if (request.GetResponse().IsSuccess)
@@ -130,7 +130,7 @@ public class ApiCeomedAplicacoes : ControllerBase
     public object? GetAgenda([FromQuery] GetAgendaParam parametro)
     {
 
-        GetRequest<GetAgendaParam, GetAgendaResponse> request = new(parametro, Request);
+        GetRequest<GetAgendaParam, GetAgendaResponse> request = new(parametro, Request, HttpContext);
         try
         {
             if (request.GetResponse().IsSuccess)
@@ -169,7 +169,7 @@ public class ApiCeomedAplicacoes : ControllerBase
     [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status500InternalServerError)]
     public object? GetPacientesFromParcialName([FromQuery] GetPacienteFromNameParam param)
     {
-        GetRequest<GetPacienteFromNameParam, List<GetPacientesFromNameResponse>> request = new(param, Request);
+        GetRequest<GetPacienteFromNameParam, List<GetPacientesFromNameResponse>> request = new(param, Request, HttpContext);
         try
         {
             if (request.GetResponse().IsSuccess)
@@ -205,7 +205,7 @@ public class ApiCeomedAplicacoes : ControllerBase
     [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status500InternalServerError)]
     public object? GetPacienteFromId([FromQuery] GetPacienteFromId param)
     {
-        GetRequest<GetPacienteFromId, Paciente> request = new(param, Request);
+        GetRequest<GetPacienteFromId, Paciente> request = new(param, Request, HttpContext);
         try
         {
             if (request.GetResponse().IsSuccess)
@@ -244,7 +244,7 @@ public class ApiCeomedAplicacoes : ControllerBase
     [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status500InternalServerError)]
     public object? GetCidadesFromEstado([FromQuery] GetCidadesParam param)
     {
-        GetRequest<GetCidadesParam, List<Cidade>> request = new(param, Request);
+        GetRequest<GetCidadesParam, List<Cidade>> request = new(param, Request, HttpContext);
         try
         {
             if (request.GetResponse().IsSuccess)
@@ -278,7 +278,7 @@ public class ApiCeomedAplicacoes : ControllerBase
     [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status500InternalServerError)]
     public object? GetConveniosMedicos([FromQuery] BaseParamApi param)
     {
-        GetRequest<BaseParamApi, List<ConvenioMedico>> request = new(param, Request);
+        GetRequest<BaseParamApi, List<ConvenioMedico>> request = new(param, Request, HttpContext);
         try
         {
             if (request.GetResponse().IsSuccess)
@@ -312,9 +312,10 @@ public class ApiCeomedAplicacoes : ControllerBase
     [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status500InternalServerError)]
     public object? GetCidsFromParcialName([FromQuery] GetCidsFromParcialNameParam param)
     {
-        GetRequest<GetCidsFromParcialNameParam, List<CIDCategoriaSub>> request = new(param, Request);
+        GetRequest<GetCidsFromParcialNameParam, List<CIDCategoriaSub>> request = new(param, Request, HttpContext);
         try
         {
+
             if (request.GetResponse().IsSuccess)
             {
                 DbHelper.SetDbClienteConection(request.Param.IdClinica.Value);
@@ -357,7 +358,7 @@ public class ApiCeomedAplicacoes : ControllerBase
     [ProducesResponseType(typeof(Response), StatusCodes.Status500InternalServerError)]
     public object? Bloqueio([FromBody] PostBloqueioAgendaParam param)
     {
-        PostRequest<PostBloqueioAgendaParam> request = new(param,Request);
+        PostRequest<PostBloqueioAgendaParam> request = new(param, Request, HttpContext);
 
         try
         {
@@ -388,7 +389,7 @@ public class ApiCeomedAplicacoes : ControllerBase
     [ProducesResponseType(typeof(Response), StatusCodes.Status500InternalServerError)]
     public object? Agendamento([FromBody] PostAgendamentoParam param)
     {
-        PostRequest<PostAgendamentoParam> request = new(param, Request);
+        PostRequest<PostAgendamentoParam> request = new(param, Request, HttpContext);
 
         try
         {
@@ -427,7 +428,7 @@ public class ApiCeomedAplicacoes : ControllerBase
     public object? Bloqueio(Int64 IdClinica,Int64 Id)
     {
         Id = Id - 9000000;
-        DeleteRequet request = new(IdClinica,Id,Request);
+        DeleteRequet request = new(IdClinica, Id, Request, HttpContext);
 
         try
         {
@@ -469,7 +470,7 @@ public class ApiCeomedAplicacoes : ControllerBase
 
         param.SetIdClinica(IdClinica);
         param.SetIdAgendamento(Id);
-        PatchRequet<PatchAgendamentoParam> request = new(param, Request);
+        PatchRequet<PatchAgendamentoParam> request = new(param, Request, HttpContext);
 
         try
         {

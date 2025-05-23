@@ -25,7 +25,7 @@ namespace APICeomedAplicacoes.Controllers
         [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status400BadRequest)]
         public object? GetPainels([FromQuery] GetPaineisParam param)
         {
-            GetRequest<GetPaineisParam, List<LocalPainelChamada>> request = new(param, Request);
+            GetRequest<GetPaineisParam, List<LocalPainelChamada>> request = new(param, Request, HttpContext);
             try
             {
                 if (request.GetResponse().IsSuccess)
@@ -51,7 +51,7 @@ namespace APICeomedAplicacoes.Controllers
         [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status400BadRequest)]
         public async Task<object>? GetLocation([FromQuery] GetLocationPainelParam param)
         {
-            GetRequest<GetLocationPainelParam, GetLocationResponse> request = new(param, Request);
+            GetRequest<GetLocationPainelParam, GetLocationResponse> request = new(param, Request, HttpContext);
             try
             {
                 if (request.GetResponse().IsSuccess)
@@ -102,7 +102,7 @@ namespace APICeomedAplicacoes.Controllers
         [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status400BadRequest)]
         public async Task<object>? GetClima([FromQuery] GetClimaParam param)
         {
-            GetRequest<GetClimaParam, GetClimaResponse> request = new(param, Request);
+            GetRequest<GetClimaParam, GetClimaResponse> request = new(param, Request, HttpContext);
             try
             {
                 if (request.GetResponse().IsSuccess)
