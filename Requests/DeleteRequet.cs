@@ -9,7 +9,7 @@ namespace APICeomedAplicacoes.Requests
     public class DeleteRequet : BaseRequest<BaseParamApi>
     {
         public DeleteRequet() : base() { }
-        public DeleteRequet(Int64? IdClinica,Int64? Id, HttpRequest? defaultRequest) : base(new BaseParamApi() { IdClinica = IdClinica}, defaultRequest) { this.response = base.response;this.Id = Id; }
+        public DeleteRequet(Int64? IdClinica, Int64? Id, HttpRequest? defaultRequest, HttpContext context = null) : base(new BaseParamApi() { IdClinica = IdClinica }, defaultRequest, context) { this.response = base.response;this.Id = Id; }
         
         private Response response { get; set; }
 

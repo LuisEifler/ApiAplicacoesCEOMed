@@ -141,22 +141,6 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 
-    //c.AddServer(new OpenApiServer
-    //{
-    //    Url = "https://ceomed.app.br:2025/api/v2",
-    //    Description = "Externo CEOMed"
-    //});
-
-    //c.AddServer(new OpenApiServer
-    //{
-    //    Url = "https://192.168.10.252:2025/api/v2",
-    //    Description = "interno CEOMed"
-    //});
-    //c.AddServer(new OpenApiServer
-    //{
-    //    Url = "https://localhost:7097//api/v2",
-    //    Description = "Debug CEOMed"
-    //});
 });
 
 

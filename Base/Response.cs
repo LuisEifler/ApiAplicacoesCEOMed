@@ -50,6 +50,7 @@ namespace APICeomedAplicacoes.Base
         [ExampleValue(null)]
         public List<string>? additionalInfoMessages { get; set; } = null;
 
+        [ExampleValue(null)]
         public List<ValueError>? errors { get; set; }
 
         public ResponseValue<T> ToResponseValue<T>()

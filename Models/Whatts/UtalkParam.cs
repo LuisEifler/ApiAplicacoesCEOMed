@@ -8,6 +8,7 @@ using System.Text;
 using System.Data.SqlClient;
 using System.Net;
 using APICeomedAplicacoes.Entidades.Whatts;
+using APICeomedAplicacoes.Entidades;
 
 namespace APICeomedAplicacoes.Models.Whatts
 {
@@ -40,6 +41,13 @@ namespace APICeomedAplicacoes.Models.Whatts
             return DbHelper.GetTable<DbMessageResponse>(query, param, true).FirstOrDefault();
         }
 
+        public bool Requestduplicate(string eventId)
+        {
+            DbHelper.UseDbPrincipal();
+            List<LogAPIAplicacoes> logs = DbHelper.GetTable<LogAPIAplicacoes>($"SELECT * FROM dbo.LogAPIAplicacoes WHERE RequestBody LIKE '%{eventId}%'",null,false);
+            return logs != null && logs.Count > 0;
+        }
+
         public async Task<HttpResponseMessage> SendMessageResponse(SentMessage mensagem)
         {
 
@@ -56,7 +64,7 @@ namespace APICeomedAplicacoes.Models.Whatts
 
                 var content = new StringContent(mensagem.ToJson(), Encoding.UTF8, "application/json");
 
-                await Task.Delay(new TimeSpan(0,0,40));
+                await Task.Delay(new TimeSpan(0, 0, 20));
 
                 var response = await client.PostAsync($"https://app-utalk.umbler.com/api/v1/messages/simplified", content);
 
@@ -155,5 +163,12 @@ namespace APICeomedAplicacoes.Models.Whatts
         public DateTime EventAtUTC { get; set; }
         public string Id { get; set; }
         public DateTime CreatedAtUTC { get; set; }
+        public SentByOrganizationMember? SentByOrganizationMember { get; set; }
     }
+
+    public class SentByOrganizationMember 
+    {
+        public string Id { get; set; }
+    }
+
 }

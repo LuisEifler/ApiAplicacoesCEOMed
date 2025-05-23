@@ -26,7 +26,7 @@ namespace APICeomedAplicacoes.Controllers
         [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status400BadRequest)]
         public object? GetConversas([FromQuery] GetConversasParam param)
         {
-            GetRequest<GetConversasParam, List<ChatInternoContatos>> request = new(param, Request);
+            GetRequest<GetConversasParam, List<ChatInternoContatos>> request = new(param, Request, HttpContext);
             try
             {
                 if (request.GetResponse().IsSuccess)
@@ -53,7 +53,7 @@ namespace APICeomedAplicacoes.Controllers
         [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status400BadRequest)]
         public object? GetMensagens([FromQuery] GetMensagensParam param)
         {
-            GetRequest<GetMensagensParam, GetMensagensResponse> request = new(param, Request);
+            GetRequest<GetMensagensParam, GetMensagensResponse> request = new(param, Request, HttpContext);
             try
             {
                 if (request.GetResponse().IsSuccess)
@@ -95,7 +95,7 @@ namespace APICeomedAplicacoes.Controllers
         [ProducesResponseType(typeof(ResponseValue<object>), StatusCodes.Status400BadRequest)]
         public object? GetContatos([FromQuery] BaseParamApi param)
         {
-            GetRequest<BaseParamApi, List<WebUsuario>> request = new(param, Request);
+            GetRequest<BaseParamApi, List<WebUsuario>> request = new(param, Request, HttpContext);
             try
             {
                 if (request.GetResponse().IsSuccess)

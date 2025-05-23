@@ -61,9 +61,14 @@ namespace APICeomedAplicacoes.Entidades
                 Params = httpRequest?.QueryString.Value?.ToString(),
                 RequestBody = body
             };
-
-            return log.Insert().ToString();
-
+            if (String.IsNullOrEmpty(response.traceId))
+                return log.Insert().ToString();
+            else
+            {
+                log.Id = Convert.ToInt64(response.traceId);
+                log.Update();
+                return response.traceId;
+            }
         }
 
         public override Int64 Insert()
@@ -73,6 +78,7 @@ namespace APICeomedAplicacoes.Entidades
             DataTable obj = DbHelper.Conection.GetDataTable(ObjInsert.Item1, ObjInsert.Item2, false);
             return Convert.ToInt64(obj.Rows[0][0]);
         }
+
 
     }
 }

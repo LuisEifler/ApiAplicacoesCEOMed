@@ -16,7 +16,7 @@ namespace APICeomedAplicacoes.Requests
     public class PatchRequet<T> : BaseRequest<T>
     {
         public PatchRequet() : base() { }
-        public PatchRequet(T param,HttpRequest? defaultRequest) : base(param, defaultRequest) 
+        public PatchRequet(T param, HttpRequest? defaultRequest, HttpContext context = null) : base(param, defaultRequest, context)
         { 
             this.response = base.response;
             this.CreateHashTable();
@@ -35,7 +35,7 @@ namespace APICeomedAplicacoes.Requests
 
         private async void CreateHashTable()
         {
-            string jsonString = this.GetRequestBody().Result;
+            string jsonString = this.GetRequestBody();
             JObject json = JObject.Parse(jsonString);
             TableName attrTable = (TableName)Attribute.GetCustomAttribute(typeof(T), typeof(TableName));
 
